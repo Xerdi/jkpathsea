@@ -13,7 +13,7 @@ public class KPathSea {
     private native void destroy(long handle);
 
     public KPathSea() {
-        this("lualatex");
+        this("pdflatex");
     }
 
     public KPathSea(String program) {
@@ -30,22 +30,12 @@ public class KPathSea {
     }
 
     public String findFile(String filename) {
-        return findFile(filename, FileFormatType.kpse_tex_format);
+        return findFile(filename, FileFormatType.tex_format);
     }
 
     // Clean up native resources
     public void cleanup() {
         destroy(instance);
-    }
-
-    // Finalizer
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            cleanup();
-        } finally {
-            super.finalize();
-        }
     }
 
     static {
@@ -55,8 +45,9 @@ public class KPathSea {
     public static void main(String[] args) {
         KPathSea kpse = new KPathSea();
         System.out.println(kpse.version());
-        String result = kpse.findFile("lua-placeholders.sty");
+        String result = kpse.findFile("gitinfo-lua.lua", FileFormatType.lua_format);
         System.out.println("File found at: " + result);
+        kpse.cleanup();
     }
 
 }

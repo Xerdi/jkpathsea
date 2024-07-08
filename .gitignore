@@ -1,6 +1,7 @@
 ### External ###
 src/lib/texlive-*source*
 src/native/*.so
+src/native/jkpathsea.h
 
 ### IntelliJ IDEA ###
 out/

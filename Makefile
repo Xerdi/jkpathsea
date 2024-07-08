@@ -13,7 +13,7 @@ JNI_HEADER_DIR := $(NATIVE_SRC_DIR)
 # Target for compiling Java source files
 $(JAVA_OUTPUT_DIR)/com/xerdi/jkpathsea/KPathSea.class: $(JAVA_SRC_DIR)/KPathSea.java
 	mkdir -p $(JAVA_OUTPUT_DIR)
-	javac -d $(JAVA_OUTPUT_DIR) $(JAVA_SRC_DIR)/KPathSea.java
+	javac -d $(JAVA_OUTPUT_DIR) $(JAVA_SRC_DIR)/*.java
 
 # Target for generating JNI header
 $(JNI_HEADER_DIR)/jkpathsea.h: $(JAVA_OUTPUT_DIR)/com/xerdi/jkpathsea/KPathSea.class
