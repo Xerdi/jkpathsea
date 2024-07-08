@@ -25,14 +25,15 @@ jkpathsea: clean $(JNI_HEADER_DIR)/jkpathsea.h
 	$(MAKE) -C src/native libjkpathsea.so
 
 clean:
+	$(MAKE) -C src/lib clean
 	$(MAKE) -C src/native clean
-	rm -r out/production/jkpathsea
+	rm -r out/production
 	rm -f $(JNI_HEADER_DIR)/jkpathsea.h
 
 # Target to clean up generated files
 clean-all:
 	$(MAKE) -C src/lib clean
 	$(MAKE) -C src/native clean
-	rm -r out/production/jkpathsea
+	rm -r out/production
 	rm -rf $(JAVA_OUTPUT_DIR)/com/xerdi/jkpathsea/KPathSea.class
 	rm -f $(JNI_HEADER_DIR)/jkpathsea.h
