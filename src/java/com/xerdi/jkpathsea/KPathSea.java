@@ -1,11 +1,9 @@
 package com.xerdi.jkpathsea;
 
-public class KPathSea {
+public class KPathSea implements AutoCloseable {
 
-    // Native handle to the KPathSea instance
-    private long instance;
+    private final long instance;
 
-    // Native methods
     private native long init();
     public native String version();
     private native void set_program_name(long handle, String invocationName, String programName);
@@ -33,8 +31,8 @@ public class KPathSea {
         return findFile(filename, FileFormatType.tex_format);
     }
 
-    // Clean up native resources
-    public void cleanup() {
+    @Override
+    public void close() {
         destroy(instance);
     }
 
@@ -43,11 +41,11 @@ public class KPathSea {
     }
 
     public static void main(String[] args) {
-        KPathSea kpse = new KPathSea();
-        System.out.println(kpse.version());
-        String result = kpse.findFile("gitinfo-lua.lua", FileFormatType.lua_format);
-        System.out.println("File found at: " + result);
-        kpse.cleanup();
+        try (KPathSea kpse = new KPathSea()) {
+            System.out.println(kpse.version());
+            System.out.println("STY file: " + kpse.findFile("babel.sty"));
+            System.out.println("Lua file: " + kpse.findFile("gitinfo-lua.lua", FileFormatType.lua_format));
+        }
     }
 
 }
