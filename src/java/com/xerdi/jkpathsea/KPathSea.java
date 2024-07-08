@@ -7,6 +7,7 @@ public class KPathSea implements AutoCloseable {
     private native long init();
     public native String version();
     private native void set_program_name(long handle, String invocationName, String programName);
+    private native String var_value(long handle, String variable);
     private native String find_file(long handle, String filename, int format, boolean mustExist);
     private native void destroy(long handle);
 
@@ -17,6 +18,10 @@ public class KPathSea implements AutoCloseable {
     public KPathSea(String program) {
         instance = init();
         set_program_name(instance, "java", program);
+    }
+
+    public String varValue(String variable) {
+        return var_value(instance, variable);
     }
 
     public String findFile(String filename, FileFormatType format, boolean mustExist) {
@@ -43,6 +48,7 @@ public class KPathSea implements AutoCloseable {
     public static void main(String[] args) {
         try (KPathSea kpse = new KPathSea()) {
             System.out.println(kpse.version());
+            System.out.println("TEXMFHOME: " + kpse.varValue("TEXMFHOME"));
             System.out.println("STY file: " + kpse.findFile("babel.sty"));
             System.out.println("Lua file: " + kpse.findFile("gitinfo-lua.lua", FileFormatType.lua_format));
         }

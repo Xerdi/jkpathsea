@@ -53,6 +53,28 @@ JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_set_1program_1name(JNIE
 
 /*
  * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    var_value
+ * Signature: (JLjava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_var_1value(JNIEnv *env, jobject obj, jlong handle, jstring var_name) {
+    kpathsea kpse = (kpathsea) (intptr_t) handle;
+    const char *var_name_utf = (*env)->GetStringUTFChars(env, var_name, NULL);
+
+    // Retrieve the variable value using kpathsea_var_value
+    const char *var_value = kpathsea_var_value(kpse, var_name_utf);
+
+    (*env)->ReleaseStringUTFChars(env, var_name, var_name_utf);
+
+    // If the variable value is found, return it as a jstring
+    if (var_value != NULL) {
+        return (*env)->NewStringUTF(env, var_value);
+    } else {
+        return NULL;
+    }
+}
+
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
  * Method:    find_file
  * Signature: (JLjava/lang/String;IZ)Ljava/lang/String;
  */
