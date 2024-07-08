@@ -1,92 +1,97 @@
 #include <jni.h>
-#include "jkpathsea.h"
 #include <kpathsea/kpathsea.h>
+#include "jkpathsea.h"
+#include <stdint.h>
 #include <stdlib.h>
 
-// Structure to hold the native KPathSea instance
-typedef struct {
-    kpathsea kpse;
-} NativeKPathSea;
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    init
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_xerdi_jkpathsea_KPathSea_init(JNIEnv *env, jobject obj) {
+    kpathsea kpse = kpathsea_new();
+    return (jlong) (intptr_t) kpse;
+}
 
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_nativeInit(JNIEnv *env, jobject obj) {
-    // Allocate memory for the native instance
-    NativeKPathSea* nativeInstance = (NativeKPathSea*) malloc(sizeof(NativeKPathSea));
-    if (nativeInstance == NULL) {
-        // Handle memory allocation failure
-        jclass exceptionClass = (*env)->FindClass(env, "java/lang/OutOfMemoryError");
-        (*env)->ThrowNew(env, exceptionClass, "Failed to allocate native memory");
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    set_program_name
+ * Signature: (JLjava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_set_1program_1name(JNIEnv *env, jobject obj, jlong handle, jstring invocation_name, jstring program_name) {
+    kpathsea kpse = (kpathsea) (intptr_t) handle;
+    const char *invocation = NULL;
+    const char *program = NULL;
+
+    // Check if kpse pointer is valid
+    if (!kpse) {
+        fprintf(stderr, "Invalid kpathsea instance handle\n");
         return;
     }
 
-    // Initialize the native instance
-    nativeInstance->kpse = kpathsea_new();
+    // Get UTF-8 strings from Java strings
+    invocation = (*env)->GetStringUTFChars(env, invocation_name, NULL);
+    program = (*env)->GetStringUTFChars(env, program_name, NULL);
 
-    // Store the native instance in the Java object
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID fid = (*env)->GetFieldID(env, cls, "nativeHandle", "J");
-    (*env)->SetLongField(env, obj, fid, (jlong) nativeInstance);
-}
-
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_setProgramName(JNIEnv *env, jobject obj, jstring invocationName, jstring programName) {
-    // Retrieve the native instance from the Java object
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID fid = (*env)->GetFieldID(env, cls, "nativeHandle", "J");
-    NativeKPathSea* nativeInstance = (NativeKPathSea*) (*env)->GetLongField(env, obj, fid);
-
-    if (nativeInstance == NULL) {
-        // Handle null native instance
-        jclass exceptionClass = (*env)->FindClass(env, "java/lang/IllegalStateException");
-        (*env)->ThrowNew(env, exceptionClass, "Native KPathSea instance is not initialized");
+    // Check if string retrieval was successful
+    if (!invocation || !program) {
+        fprintf(stderr, "Failed to retrieve invocation or program name\n");
+        // Release obtained strings if partially retrieved
+        if (invocation) (*env)->ReleaseStringUTFChars(env, invocation_name, invocation);
+        if (program) (*env)->ReleaseStringUTFChars(env, program_name, program);
         return;
     }
 
-    const char *nativeInvocationName = (*env)->GetStringUTFChars(env, invocationName, 0);
-    const char *nativeProgramName = (*env)->GetStringUTFChars(env, programName, 0);
+    // Set program name using kpathsea function
+    kpathsea_set_program_name(kpse, invocation, program);
 
-    kpathsea_set_program_name(nativeInstance->kpse, nativeInvocationName, nativeProgramName);
-
-    (*env)->ReleaseStringUTFChars(env, invocationName, nativeInvocationName);
-    (*env)->ReleaseStringUTFChars(env, programName, nativeProgramName);
+    // Release UTF-8 strings
+    (*env)->ReleaseStringUTFChars(env, invocation_name, invocation);
+    (*env)->ReleaseStringUTFChars(env, program_name, program);
 }
 
-JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_findFile(JNIEnv *env, jobject obj, jstring filename) {
-    // Retrieve the native instance from the Java object
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID fid = (*env)->GetFieldID(env, cls, "nativeHandle", "J");
-    NativeKPathSea* nativeInstance = (NativeKPathSea*) (*env)->GetLongField(env, obj, fid);
-
-    if (nativeInstance == NULL) {
-        // Handle null native instance
-        jclass exceptionClass = (*env)->FindClass(env, "java/lang/IllegalStateException");
-        (*env)->ThrowNew(env, exceptionClass, "Native KPathSea instance is not initialized");
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    find_file
+ * Signature: (JLjava/lang/String;IZ)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_find_1file(JNIEnv *env, jobject obj, jlong handle, jstring filename, jint format, jboolean must_exist) {
+    kpathsea kpse = (kpathsea) (intptr_t) handle;
+    const char *file_name = (*env)->GetStringUTFChars(env, filename, NULL);
+    string result = kpathsea_find_file(kpse, file_name, (int) format, (int) must_exist);
+    (*env)->ReleaseStringUTFChars(env, filename, file_name);
+    if (result) {
+        jstring jresult = (*env)->NewStringUTF(env, result);
+        free(result); // Free the result as it was allocated by kpathsea_find_file
+        return jresult;
+    } else {
         return NULL;
     }
+}
 
-    const char *nativeFilename = (*env)->GetStringUTFChars(env, filename, 0);
-
-    // Use a valid path. For example, search for TeX files:
-    const char *result = kpathsea_find_file(nativeInstance->kpse, nativeFilename, kpse_tex_format, true);
-    (*env)->ReleaseStringUTFChars(env, filename, nativeFilename);
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    version
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_version
+  (JNIEnv *env, jobject obj) {
+    const char *result = kpathsea_version_string;
 
     if (result == NULL) {
-        return NULL; // File not found
+        return NULL;
     } else {
         return (*env)->NewStringUTF(env, result);
     }
 }
 
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_nativeCleanup(JNIEnv *env, jobject obj) {
-    // Retrieve the native instance from the Java object
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID fid = (*env)->GetFieldID(env, cls, "nativeHandle", "J");
-    NativeKPathSea* nativeInstance = (NativeKPathSea*) (*env)->GetLongField(env, obj, fid);
-
-    if (nativeInstance != NULL) {
-        // Clean up the native instance
-        kpathsea_finish(nativeInstance->kpse);
-        free(nativeInstance);
-
-        // Clear the native handle in the Java object
-        (*env)->SetLongField(env, obj, fid, (jlong) 0);
-    }
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    destroy
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_destroy(JNIEnv *env, jobject obj, jlong handle) {
+    kpathsea kpse = (kpathsea) (intptr_t) handle;
+    kpathsea_finish(kpse);
 }

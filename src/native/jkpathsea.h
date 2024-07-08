@@ -9,35 +9,43 @@ extern "C" {
 #endif
 /*
  * Class:     com_xerdi_jkpathsea_KPathSea
- * Method:    nativeInit
- * Signature: ()V
+ * Method:    init
+ * Signature: ()J
  */
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_nativeInit
+JNIEXPORT jlong JNICALL Java_com_xerdi_jkpathsea_KPathSea_init
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_xerdi_jkpathsea_KPathSea
- * Method:    setProgramName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ * Method:    version
+ * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_setProgramName
-  (JNIEnv *, jobject, jstring, jstring);
-
-/*
- * Class:     com_xerdi_jkpathsea_KPathSea
- * Method:    findFile
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_findFile
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     com_xerdi_jkpathsea_KPathSea
- * Method:    nativeCleanup
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_nativeCleanup
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_version
   (JNIEnv *, jobject);
+
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    set_program_name
+ * Signature: (JLjava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_set_1program_1name
+  (JNIEnv *, jobject, jlong, jstring, jstring);
+
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    find_file
+ * Signature: (JLjava/lang/String;IZ)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_find_1file
+  (JNIEnv *, jobject, jlong, jstring, jint, jboolean);
+
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSea
+ * Method:    destroy
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_destroy
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }
