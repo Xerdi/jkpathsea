@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="KPathSea" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="com.xerdi.jkpathsea.KPathSea" />
+    <module name="jkpathsea" />
+    <option name="VM_PARAMETERS" value="-Djava.library.path=$PROJECT_DIR$/src/native/" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.xerdi.jkpathsea.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
