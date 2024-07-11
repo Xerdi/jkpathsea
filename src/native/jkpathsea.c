@@ -94,6 +94,32 @@ JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_find_1file(JNI
 
 /*
  * Class:     com_xerdi_jkpathsea_KPathSeaNative
+ * Method:    in_name_ok
+ * Signature: (JLjava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_in_1name_1ok(JNIEnv *env, jobject obj, jlong handle, jstring name) {
+    kpathsea kpse = (kpathsea) (intptr_t) handle;
+    const char *c_name = (*env)->GetStringUTFChars(env, name, NULL);
+    jboolean result = (jboolean) kpathsea_in_name_ok_silent(kpse, c_name);
+    (*env)->ReleaseStringUTFChars(env, name, c_name);
+    return result;
+}
+
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
+ * Method:    out_name_ok
+ * Signature: (JLjava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_out_1name_1ok(JNIEnv *env, jobject obj, jlong handle, jstring name) {
+    kpathsea kpse = (kpathsea) (intptr_t) handle;
+    const char *c_name = (*env)->GetStringUTFChars(env, name, NULL);
+    jboolean result = (jboolean) kpathsea_out_name_ok_silent(kpse, c_name);
+    (*env)->ReleaseStringUTFChars(env, name, c_name);
+    return result;
+}
+
+/*
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    version
  * Signature: ()Ljava/lang/String;
  */

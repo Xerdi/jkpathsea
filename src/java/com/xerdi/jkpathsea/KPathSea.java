@@ -31,6 +31,16 @@ public class KPathSea implements IKPathSea, AutoCloseable {
     }
 
     @Override
+    public boolean inNameOk(String name) {
+        return kpse.inNameOk(name);
+    }
+
+    @Override
+    public boolean outNameOk(String name) {
+        return kpse.outNameOk(name);
+    }
+
+    @Override
     public String findFile(String filename, FileFormatType format, boolean mustExist) {
         return kpse.findFile(filename, format, mustExist);
     }

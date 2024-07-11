@@ -9,6 +9,8 @@ public class KPathSeaNative implements IKPathSea, AutoCloseable {
     public native String version();
     private native void set_program_name(long handle, String invocationName, String programName);
     private native String var_value(long handle, String variable);
+    private native boolean in_name_ok(long handle, String name);
+    private native boolean out_name_ok(long handle, String name);
     private native String find_file(long handle, String filename, int format, boolean mustExist);
     private native void destroy(long handle);
 
@@ -25,6 +27,16 @@ public class KPathSeaNative implements IKPathSea, AutoCloseable {
 
     public String varValue(String variable) {
         return var_value(instance, variable);
+    }
+
+    @Override
+    public boolean inNameOk(String name) {
+        return in_name_ok(instance, name);
+    }
+
+    @Override
+    public boolean outNameOk(String name) {
+        return out_name_ok(instance, name);
     }
 
     public String findFile(String filename, FileFormatType format, boolean mustExist) {
@@ -63,6 +75,8 @@ public class KPathSeaNative implements IKPathSea, AutoCloseable {
             System.out.println("TEXMFHOME: " + kpse.varValue("TEXMFHOME"));
             System.out.println("STY file: " + kpse.findFile("babel.sty"));
             System.out.println("Lua file: " + kpse.findFile("gitinfo-lua.lua", FileFormatType.lua));
+            System.out.println("main.tex ok in file? " + (kpse.inNameOk("main.tex") ? "yes" : "no"));
+            System.out.println("../out/my-document.pdf ok out file? " + (kpse.outNameOk("../out/my-document.pdf") ? "yes" : "no"));
         }
     }
 

@@ -6,14 +6,18 @@ public interface IKPathSea {
 
     String varValue(String variable);
 
-    String findFile(String filename, FileFormatType format, boolean mustExist);
+    boolean inNameOk(String name);
 
-    default String findFile(String filename, FileFormatType format) {
-        return findFile(filename, format, false);
+    boolean outNameOk(String name);
+
+    String findFile(String name, FileFormatType format, boolean mustExist);
+
+    default String findFile(String name, FileFormatType format) {
+        return findFile(name, format, false);
     }
 
-    default String findFile(String filename) {
-        return findFile(filename, FileFormatType.tex);
+    default String findFile(String name) {
+        return findFile(name, FileFormatType.tex);
     }
 
 }
