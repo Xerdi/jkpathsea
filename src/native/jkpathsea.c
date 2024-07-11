@@ -5,21 +5,21 @@
 #include <stdlib.h>
 
 /*
- * Class:     com_xerdi_jkpathsea_KPathSea
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    init
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_com_xerdi_jkpathsea_KPathSea_init(JNIEnv *env, jobject obj) {
+JNIEXPORT jlong JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_init(JNIEnv *env, jobject obj) {
     kpathsea kpse = kpathsea_new();
     return (jlong) (intptr_t) kpse;
 }
 
 /*
- * Class:     com_xerdi_jkpathsea_KPathSea
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    set_program_name
  * Signature: (JLjava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_set_1program_1name(JNIEnv *env, jobject obj, jlong handle, jstring invocation_name, jstring program_name) {
+JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_set_1program_1name(JNIEnv *env, jobject obj, jlong handle, jstring invocation_name, jstring program_name) {
     kpathsea kpse = (kpathsea) (intptr_t) handle;
     const char *invocation = NULL;
     const char *program = NULL;
@@ -52,11 +52,11 @@ JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_set_1program_1name(JNIE
 }
 
 /*
- * Class:     com_xerdi_jkpathsea_KPathSea
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    var_value
  * Signature: (JLjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_var_1value(JNIEnv *env, jobject obj, jlong handle, jstring var_name) {
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_var_1value(JNIEnv *env, jobject obj, jlong handle, jstring var_name) {
     kpathsea kpse = (kpathsea) (intptr_t) handle;
     const char *var_name_utf = (*env)->GetStringUTFChars(env, var_name, NULL);
 
@@ -74,11 +74,11 @@ JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_var_1value(JNIEnv *e
 }
 
 /*
- * Class:     com_xerdi_jkpathsea_KPathSea
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    find_file
  * Signature: (JLjava/lang/String;IZ)Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_find_1file(JNIEnv *env, jobject obj, jlong handle, jstring filename, jint format, jboolean must_exist) {
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_find_1file(JNIEnv *env, jobject obj, jlong handle, jstring filename, jint format, jboolean must_exist) {
     kpathsea kpse = (kpathsea) (intptr_t) handle;
     const char *file_name = (*env)->GetStringUTFChars(env, filename, NULL);
     string result = kpathsea_find_file(kpse, file_name, (int) format, (int) must_exist);
@@ -93,11 +93,11 @@ JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_find_1file(JNIEnv *e
 }
 
 /*
- * Class:     com_xerdi_jkpathsea_KPathSea
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    version
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_version
+JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_version
   (JNIEnv *env, jobject obj) {
     const char *result = kpathsea_version_string;
 
@@ -109,11 +109,11 @@ JNIEXPORT jstring JNICALL Java_com_xerdi_jkpathsea_KPathSea_version
 }
 
 /*
- * Class:     com_xerdi_jkpathsea_KPathSea
+ * Class:     com_xerdi_jkpathsea_KPathSeaNative
  * Method:    destroy
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSea_destroy(JNIEnv *env, jobject obj, jlong handle) {
+JNIEXPORT void JNICALL Java_com_xerdi_jkpathsea_KPathSeaNative_destroy(JNIEnv *env, jobject obj, jlong handle) {
     kpathsea kpse = (kpathsea) (intptr_t) handle;
     kpathsea_finish(kpse);
 }
