@@ -1,8 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="KPathSeaNative" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/java-8-openjdk-amd64" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="LD_LIBRARY_PATH" value="$PROJECT_DIR$/src/native/:$PROJECT_DIR$/src/lib/texlive-source/texk/kpathsea/.libs" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="com.xerdi.jkpathsea.KPathSeaNative" />
     <module name="jkpathsea" />
-    <option name="VM_PARAMETERS" value="-Djava.library.path=$PROJECT_DIR$/src/native/" />
+    <option name="VM_PARAMETERS" value="-Djava.library.path=$PROJECT_DIR$/src/native/:$PROJECT_DIR$/src/lib/texlive-source/texk/kpathsea/.libs" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.xerdi.jkpathsea.*" />

@@ -1,5 +1,5 @@
 # Adjust these variables as needed
-JAVA_HOME = /home/erik/.jdks/openjdk-20.0.1
+JAVA_HOME = $(shell dirname $$(dirname $$(readlink -f $$(which javac))))
 TL_DIR = ../lib/texlive-source/texk
 
 # JNI header location

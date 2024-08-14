@@ -22,7 +22,7 @@ public class KPathSeaNative implements IKPathSea, AutoCloseable {
         if (!NATIVE_SUPPORT)
             throw new UnsupportedOperationException("Could not find native library jkpathsea");
         instance = init();
-        set_program_name(instance, "java", program);
+        set_program_name(instance, program, program);
     }
 
     public String varValue(String variable) {
